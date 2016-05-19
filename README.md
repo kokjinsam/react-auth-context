@@ -17,6 +17,7 @@ import React, { Component, PropTypes } from 'react';
 const childContextTypes = {
   isLoggedIn: PropTypes.bool,
   isLoggingIn: PropTypes.bool,
+  currentUser: PropTypes.any,
 };
 
 class TrioLayout extends Component {
@@ -24,11 +25,13 @@ class TrioLayout extends Component {
     const {
       loggedIn,
       loggingIn,
+      currentUser,
     } = this.props;
 
     return {
       isLoggedIn: loggedIn,
       isLoggingIn: loggingIn,
+      currentUser,
     };
   }
 
@@ -62,6 +65,7 @@ class HomePage extends Component {
     const {
       isLoggingIn,  // this is available from injectContext
       isLoggedIn,  // this is available from injectContext
+      currentUser,  // this is available from injectContext
     } = this.props;
 
     return (
