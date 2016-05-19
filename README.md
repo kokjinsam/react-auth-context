@@ -10,9 +10,51 @@ npm install --save react-auth-context
 
 ### Usage
 
+First create a layout component with childContextTypes:
+```
+import React, { Component, PropTypes } from 'react';
+
+const childContextTypes = {
+  isLoggedIn: PropTypes.bool,
+  isLoggingIn: PropTypes.bool,
+};
+
+class TrioLayout extends Component {
+  getChildContext() {
+    const {
+      loggedIn,
+      loggingIn,
+    } = this.props;
+
+    return {
+      isLoggedIn: loggedIn,
+      isLoggingIn: loggingIn,
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        {content()}
+      </div>
+    );
+  }
+}
+
+Layout.childContextTypes = childContextTypes;
+export default TrioLayout;
+
+```
+
+Then create a container for the layout container using `meteor-auth`:
+
+```
+npm install -s meteor-auth
+```
+
+Lastly, use `react-auth-context` to inject `isLoggedIn` and `isLoggingIn`:
 ```
 import React, { Component } from 'react';
-import radium from 'radium';
 import injectContext from 'react-auth-context';
 
 class HomePage extends Component {
@@ -30,5 +72,5 @@ class HomePage extends Component {
   }
 }
 
-export default radium(injectContext(HomePage));
+export default injectContext(HomePage);
 ```
