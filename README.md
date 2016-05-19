@@ -1,76 +1,34 @@
-## Apollo Queries for React Komposer
+## React Auth Context
 
-> For more information on React Komposer, see [here](https://github.com/kadirahq/react-komposer).
+> Injects Meteor Auth into React components
 
 ### Installation
 
 ```
-npm install --save react-komposer-queries mantra-core apollo-client
+npm install --save react-auth-context
 ```
-
-> mantra-core and apollo-client are peerDependencies of react-komposer-redux
 
 ### Usage
 
-In `configs/context.js`:
-
 ```
-import * as Collections from '../../lib/collections';
-import { Meteor } from 'meteor/meteor';
-import { FlowRouter } from 'meteor/kadira:flow-router-ssr';
-import { Tracker } from 'meteor/tracker';
-import ApolloClient, { createNetworkInterface } from 'apollo-client';
+import React, { Component } from 'react';
+import radium from 'radium';
+import injectContext from 'react-auth-context';
 
-export default function () {
-  const url = Meteor.absoluteUrl('graphql');
-  const networkInterface = createNetworkInterface(url);
-  const Client = new ApolloClient({
-    networkInterface,
-  });
+class HomePage extends Component {
+  render() {
+    const {
+      isLoggingIn,  // this is available from injectContext
+      isLoggedIn,  // this is available from injectContext
+    } = this.props;
 
-  return {
-    Meteor,
-    FlowRouter,
-    Collections,
-    Tracker,
-    Client, // make sure to supply this
-  };
-}
-```
-
-Here's an example of a Mantra container:
-
-```
-import TodoList from '../../components/todo-list';
-import composeWithQueries from 'react-komposer-queries';
-import { useDeps, composeAll } from 'mantra-core';
-
-const query = `
-  allTodos {
-    _id
-    todo
-    createdAt
+    return (
+      <div>
+        <span>Home Page</span>
+      </div>
+    );
   }
-`;
+}
 
-const dataMapper = ({
-  data,
-  errors,
-}) => {
-  const {
-    allTodos,
-  } = data;
-
-  return {
-    todos: allTodos,
-    errors,
-  };
-};
-
-
-export default composeAll(
-  composeWithQueries(query, dataMapper),
-  useDeps()
-)(TodoList);
-
+export default radium(injectContext(HomePage));
 ```
